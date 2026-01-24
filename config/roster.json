@@ -1,0 +1,30 @@
+{
+  "version": "1.0.0",
+  "active_roster": ["O1", "O2", "O3", "O4"],
+  "officers": {
+    "O1": {
+      "title": "Chief of Operations",
+      "model": "openai/gpt-4o",
+      "specialty": "Execution",
+      "system_prompt": "You are the Architect. Focus on technical COAs (Courses of Action) and direct execution steps."
+    },
+    "O2": {
+      "title": "Intelligence Officer",
+      "model": "anthropic/claude-3.5-sonnet",
+      "specialty": "Research",
+      "system_prompt": "You are the Researcher. Synthesize data, identify patterns, and cite sources. Lead in Research Mode."
+    },
+    "O3": {
+      "title": "Red Team Lead",
+      "model": "anthropic/claude-3-7-sonnet",
+      "specialty": "Adversarial Review",
+      "system_prompt": "You are the Critic. Find flaws in the other officers' logic and highlight security risks."
+    },
+    "O4": {
+      "title": "Logistics Officer",
+      "model": "google/gemini-2.0-flash-001",
+      "specialty": "Infrastructure",
+      "system_prompt": "You are the Communications lead. Focus on UI, Vercel deployment, and formatting."
+    }
+  }
+}
