@@ -1,36 +1,42 @@
 "use client";
 
-import { MissionMode } from "./ChatInterface";
+import { CapabilityClass } from "./ChatInterface";
 
 interface MissionModeSelectorProps {
-  currentMode: MissionMode;
-  onModeChange: (mode: MissionMode) => void;
+  currentMode: CapabilityClass;
+  onModeChange: (mode: CapabilityClass) => void;
 }
 
-const modes: { id: MissionMode; label: string; description: string; icon: string }[] = [
+const modes: { id: CapabilityClass; label: string; description: string; icon: string }[] = [
   {
-    id: "general",
-    label: "General",
-    description: "Full council response",
+    id: "Strategic",
+    label: "Strategic",
+    description: "Top-tier models for critical decisions",
+    icon: "⭐",
+  },
+  {
+    id: "Operational",
+    label: "Operational",
+    description: "Production-grade balanced response",
     icon: "⚡",
   },
   {
-    id: "research",
-    label: "Research",
-    description: "O-2 Intelligence lead",
-    icon: "🔍",
+    id: "Tactical",
+    label: "Tactical",
+    description: "Fast specialist models",
+    icon: "🎯",
   },
   {
-    id: "audit",
-    label: "Audit",
-    description: "O-3 Red Team focus",
-    icon: "🛡️",
+    id: "Support",
+    label: "Support",
+    description: "Efficient cost-effective models",
+    icon: "🛠️",
   },
   {
-    id: "problem-solving",
-    label: "Problem Solving",
-    description: "O-1 & O-4 tactical",
-    icon: "⚙️",
+    id: "All",
+    label: "All",
+    description: "Full council deployment",
+    icon: "🌐",
   },
 ];
 
@@ -41,7 +47,7 @@ export default function MissionModeSelector({
   return (
     <div className="flex items-center gap-2">
       <span className="text-xs text-slate-500 uppercase tracking-wider font-semibold mr-2">
-        Mission Mode:
+        Capability Class:
       </span>
       <div className="flex gap-2 flex-wrap">
         {modes.map((mode) => (

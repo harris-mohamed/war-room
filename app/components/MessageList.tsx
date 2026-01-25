@@ -15,6 +15,14 @@ const officerColors: Record<string, { bg: string; border: string; text: string }
   O4: { bg: "bg-amber-950/40", border: "border-amber-700/50", text: "text-amber-400" },
   O5: { bg: "bg-emerald-950/40", border: "border-emerald-700/50", text: "text-emerald-400" },
   O6: { bg: "bg-cyan-950/40", border: "border-cyan-700/50", text: "text-cyan-400" },
+  O7: { bg: "bg-pink-950/40", border: "border-pink-700/50", text: "text-pink-400" },
+  O8: { bg: "bg-indigo-950/40", border: "border-indigo-700/50", text: "text-indigo-400" },
+  O9: { bg: "bg-teal-950/40", border: "border-teal-700/50", text: "text-teal-400" },
+  O10: { bg: "bg-orange-950/40", border: "border-orange-700/50", text: "text-orange-400" },
+  O11: { bg: "bg-violet-950/40", border: "border-violet-700/50", text: "text-violet-400" },
+  O12: { bg: "bg-lime-950/40", border: "border-lime-700/50", text: "text-lime-400" },
+  O13: { bg: "bg-rose-950/40", border: "border-rose-700/50", text: "text-rose-400" },
+  O14: { bg: "bg-sky-950/40", border: "border-sky-700/50", text: "text-sky-400" },
 };
 
 // Group consecutive officer messages together
@@ -98,43 +106,44 @@ export default function MessageList({ messages, isLoading }: MessageListProps) {
             );
           }
 
-          // Group of officer messages - display in columns
+          // Group of officer messages - display horizontally
           const officerMessages = item;
           return (
             <div
               key={`group-${index}`}
               className="animate-in fade-in slide-in-from-bottom-2 duration-300"
             >
-              <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
+              <div className="flex gap-3 overflow-x-auto">
                 {officerMessages.map((message) => (
-                  <div key={message.id} className="flex flex-col h-full">
+                  <div key={message.id} className="flex-1 min-w-[280px]">
                     <div
                       className={`
-                        flex-1 rounded-lg px-4 py-3 border flex flex-col
+                        h-full rounded-lg px-3 py-2 border flex flex-col
                         ${message.officerId ? officerColors[message.officerId]?.bg : "bg-slate-800/40"}
                         ${message.officerId ? officerColors[message.officerId]?.border : "border-slate-700"}
                       `}
                     >
-                      <div className="flex items-center gap-2 mb-3">
-                        <span
-                          className={`
-                            text-xs font-bold uppercase tracking-wider px-2 py-1 rounded
-                            ${message.officerId ? officerColors[message.officerId]?.text : "text-slate-400"}
-                            bg-slate-900/60
-                          `}
-                        >
-                          {message.officerId || "System"}
-                        </span>
-                        <span className="text-xs text-slate-500 ml-auto">
-                          {message.timestamp.toLocaleTimeString()}
-                        </span>
-                      </div>
                       <div className="mb-2">
-                        <span className="text-xs text-slate-400 font-medium">
-                          {message.officerTitle}
-                        </span>
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span
+                            className={`
+                              text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded
+                              ${message.officerId ? officerColors[message.officerId]?.text : "text-slate-400"}
+                              bg-slate-900/60
+                            `}
+                          >
+                            {message.officerId && message.officerModel
+                              ? `${message.officerId} - ${message.officerModel}`
+                              : message.officerId || "System"}
+                          </span>
+                          {message.capabilityClass && (
+                            <span className="text-[9px] text-slate-500 uppercase tracking-wide">
+                              {message.capabilityClass}
+                            </span>
+                          )}
+                        </div>
                       </div>
-                      <p className="text-slate-200 whitespace-pre-wrap leading-relaxed text-sm flex-1">
+                      <p className="text-slate-200 whitespace-pre-wrap leading-snug text-sm flex-1">
                         {message.content}
                       </p>
                     </div>

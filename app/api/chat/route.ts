@@ -1,16 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getOfficersForMission, getOfficerById, type MissionMode } from "@/lib/roster-manager";
+import { getOfficersForMission, getOfficerById, type CapabilityClass } from "@/lib/roster-manager";
 import { callOfficersParallel, type Message } from "@/lib/openrouter";
 
 export interface ChatRequest {
   message: string;
-  missionMode: MissionMode;
+  capabilityClass: CapabilityClass;
   conversationHistory?: Message[];
 }
 
 export interface OfficerResponse {
   officerId: string;
   officerTitle: string;
+  officerModel: string;
   content: string;
   error?: string;
 }
@@ -23,7 +24,7 @@ export interface ChatResponse {
 export async function POST(request: NextRequest) {
   try {
     const body: ChatRequest = await request.json();
-    const { message, missionMode, conversationHistory = [] } = body;
+    const { message, capabilityClass, conversationHistory = [] } = body;
 
     // Validate input
     if (!message || typeof message !== "string") {
@@ -33,24 +34,24 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!missionMode) {
+    if (!capabilityClass) {
       return NextResponse.json(
-        { error: "Mission mode is required" },
+        { error: "Capability class is required" },
         { status: 400 }
       );
     }
 
-    // Get officers for this mission
-    const officers = getOfficersForMission(missionMode);
+    // Get officers for this capability class
+    const officers = getOfficersForMission(capabilityClass);
 
     if (officers.length === 0) {
       return NextResponse.json(
-        { error: "No officers available for this mission mode" },
+        { error: "No officers available for this capability class" },
         { status: 500 }
       );
     }
 
-    console.log(`[War Room] Mission ${missionMode}: Deploying ${officers.length} officers`);
+    console.log(`[War Room] Capability ${capabilityClass}: Deploying ${officers.length} officers`);
     console.log(`[War Room] Officers: ${officers.map(o => o.id).join(", ")}`);
 
     // Execute parallel fan-out to OpenRouter
@@ -62,6 +63,7 @@ export async function POST(request: NextRequest) {
       return {
         officerId: result.officerId,
         officerTitle: officer?.title || "Unknown Officer",
+        officerModel: officer?.model || "Unknown Model",
         content: result.content,
         error: result.error,
       };

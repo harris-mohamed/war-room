@@ -10,31 +10,35 @@ The "War Room" members are configured according to the **Roster-First Principle*
 ```json
 {
   "version": "1.0.0",
-  "active_roster": ["O1", "O2", "O3", "O4"],
+  "active_roster": ["O5", "O6", "O7", "O8"],
   "officers": {
     "O1": {
-      "title": "Chief of Operations",
-      "model": "openai/gpt-4o",
-      "specialty": "Execution",
-      "system_prompt": "You are the Architect. Focus on technical COAs (Courses of Action) and direct execution steps."
+      "title": "Executive Advisor",
+      "model": "anthropic/claude-opus-4.5",
+      "capability_class": "Strategic",
+      "specialty": "Decision Support",
+      "system_prompt": "You are the Executive. Provide comprehensive analysis, weigh trade-offs, and deliver executive-level strategic recommendations."
     },
-    "O2": {
+    "O5": {
+      "title": "Strategic Advisor",
+      "model": "anthropic/claude-sonnet-4.5",
+      "capability_class": "Operational",
+      "specialty": "Strategic Planning",
+      "system_prompt": "You are the Strategist. Provide high-level strategic analysis and long-term planning considerations."
+    },
+    "O9": {
       "title": "Intelligence Officer",
       "model": "anthropic/claude-3.5-sonnet",
+      "capability_class": "Tactical",
       "specialty": "Research",
-      "system_prompt": "You are the Researcher. Synthesize data, identify patterns, and cite sources. Lead in Research Mode."
+      "system_prompt": "You are the Researcher. Synthesize data, identify patterns, and cite sources."
     },
-    "O3": {
-      "title": "Red Team Lead",
-      "model": "anthropic/claude-3-7-sonnet",
-      "specialty": "Adversarial Review",
-      "system_prompt": "You are the Critic. Find flaws in the other officers' logic and highlight security risks."
-    },
-    "O4": {
-      "title": "Logistics Officer",
-      "model": "google/gemini-2.0-flash-001",
-      "specialty": "Infrastructure",
-      "system_prompt": "You are the Communications lead. Focus on UI, Vercel deployment, and formatting."
+    "O13": {
+      "title": "Efficiency Officer",
+      "model": "openai/gpt-4o-mini",
+      "capability_class": "Support",
+      "specialty": "Cost-Effective Solutions",
+      "system_prompt": "You are the Optimizer. Focus on resource-efficient solutions and pragmatic approaches."
     }
   }
 }
@@ -45,17 +49,18 @@ The "War Room" members are configured according to the **Roster-First Principle*
 * Implements **Prompt Caching** to reduce costs for repeating Officer system prompts.
 * Primary API endpoint: `https://openrouter.ai/api/v1/chat/completions`.
 
-* **Controller:** `/lib/roster-manager.ts` (Parses JSON and handles mission-specific filtering).
+* **Controller:** `/lib/roster-manager.ts` (Parses JSON and handles capability class filtering).
 * **Dispatcher:** `/api/chat/route.ts` (Executes parallel execution to OpenRouter).
 
-## Mission Profiles (Modes)
+## Capability Class System
 
-Officers are deployed based on the **Mission Mode** requested by the Commander:
+Officers are deployed based on the **Capability Class** selected by the Commander. The system organizes officers into NATO-style capability tiers:
 
-1. **General/Everyday:** Full council response for a balanced perspective.
-2. **Research Mode:** O-2 leads; focus on deep synthesis and Markdown file generation.
-3. **Audit Mode:** O-3 takes point to identify security and logical vulnerabilities.
-4. **Problem Solving:** O-1 and O-4 collaborate on rapid technical solutions.
+1. **Strategic:** Top-tier models for critical decisions and comprehensive analysis (e.g., Claude Opus 4.5, GPT-5, Grok 4)
+2. **Operational:** Production-grade models for balanced, reliable responses (e.g., Claude Sonnet 4.5, GPT-4o)
+3. **Tactical:** Fast specialist models for rapid execution (e.g., Claude 3.5 Sonnet, Gemini Flash variants)
+4. **Support:** Efficient, cost-effective models for routine operations (e.g., GPT-4o-mini, MiMo-V2-Flash)
+5. **All:** Full council deployment - all active officers regardless of capability class
 
 ## Tech Stack & Security
 
@@ -66,12 +71,16 @@ Officers are deployed based on the **Mission Mode** requested by the Commander:
 
 ## Development Workflow
 
-1. **Adding an Officer:** Update the `officers` object in `roster.json` with a valid OpenRouter model slug.
-2. **Changing the Council:** Modify the `active_roster` array to select which Officers participate in the next mission.
+1. **Adding an Officer:** Update the `officers` object in `roster.json` with:
+   - A valid OpenRouter model slug
+   - Appropriate `capability_class` (Strategic, Operational, Tactical, or Support)
+   - Unique title and specialty
+   - Tailored system prompt
+2. **Changing the Council:** Modify the `active_roster` array to select which Officers participate.
 3. **Testing:** Use `npm run dev` to verify the parallel fan-out and response aggregation.
 
 ## Rules of Engagement
 
-* **Authority:** All Officer responses must be prefaced with their Title and Designation (e.g., "[O-1 Chief of Operations]: ...").
-* **Dissent:** If the Red Team Lead (O-3) is active, they are REQUIRED to find at least one point of failure or risk in the Council's consensus.
+* **Authority:** All Officer responses are identified with their Title and Designation (e.g., "[O-5 Strategic Advisor]: ...").
+* **Capability Hierarchy:** Officers are organized by capability class to enable strategic resource allocation and cost optimization.
 * **Privacy:** Under no circumstances should the API accept requests from unauthorized emails or unauthenticated sessions.
