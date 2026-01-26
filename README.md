@@ -4,9 +4,7 @@ A multi-LLM strategic interface that queries multiple AI models in parallel to g
 
 ![War Room Interface](docs/images/war_room_demo.png)
 
-### Demo Video
-
-[Watch the demo](docs/images/war_room_demo.mp4)
+![Demo](docs/images/war_room_demo.gif)
 
 ## What is this?
 
