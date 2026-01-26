@@ -4,11 +4,12 @@ export interface Officer {
   id: string;
   title: string;
   model: string;
+  capability_class: string;
   specialty: string;
   system_prompt: string;
 }
 
-export type MissionMode = "general" | "research" | "audit" | "problem-solving";
+export type CapabilityClass = "Strategic" | "Operational" | "Tactical" | "Support" | "All";
 
 export interface RosterConfig {
   version: string;
@@ -35,29 +36,18 @@ export function getActiveOfficers(): Officer[] {
 }
 
 /**
- * Filter officers based on mission mode
+ * Filter officers based on capability class
  */
-export function getOfficersForMission(mode: MissionMode): Officer[] {
+export function getOfficersForMission(capabilityClass: CapabilityClass): Officer[] {
   const allOfficers = getActiveOfficers();
 
-  switch (mode) {
-    case "research":
-      // O-2 leads research mode
-      return allOfficers.filter((o) => o.id === "O2" || o.specialty === "Research");
-
-    case "audit":
-      // O-3 takes point for security audits
-      return allOfficers.filter((o) => o.id === "O3" || o.specialty === "Adversarial Review");
-
-    case "problem-solving":
-      // O-1 and O-4 collaborate on technical solutions
-      return allOfficers.filter((o) => o.id === "O1" || o.id === "O4");
-
-    case "general":
-    default:
-      // Full council for balanced perspective
-      return allOfficers;
+  if (capabilityClass === "All") {
+    // Full council response
+    return allOfficers;
   }
+
+  // Filter by capability class
+  return allOfficers.filter((o) => o.capability_class === capabilityClass);
 }
 
 /**
