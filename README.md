@@ -2,6 +2,12 @@
 
 A multi-LLM strategic interface that queries multiple AI models in parallel to get diversified opinions and perspectives on any question.
 
+![War Room Interface](docs/images/war_room_demo.png)
+
+### Demo Video
+
+[Watch the demo](docs/images/war_room_demo.mp4)
+
 ## What is this?
 
 The War Room is a council of LLMs with different personalities and capabilities. Instead of getting a single response from one model, you get varied responses from multiple "officers" - each with their own specialty, personality, and approach to problem-solving.
