@@ -6,6 +6,7 @@ export interface ChatRequest {
   message: string;
   missionMode: MissionMode;
   conversationHistory?: Message[];
+  apiKey?: string; // Optional user-provided API key (session-only)
 }
 
 export interface OfficerResponse {
@@ -23,7 +24,7 @@ export interface ChatResponse {
 export async function POST(request: NextRequest) {
   try {
     const body: ChatRequest = await request.json();
-    const { message, missionMode, conversationHistory = [] } = body;
+    const { message, missionMode, conversationHistory = [], apiKey } = body;
 
     // Validate input
     if (!message || typeof message !== "string") {
@@ -52,9 +53,10 @@ export async function POST(request: NextRequest) {
 
     console.log(`[War Room] Mission ${missionMode}: Deploying ${officers.length} officers`);
     console.log(`[War Room] Officers: ${officers.map(o => o.id).join(", ")}`);
+    console.log(`[War Room] Mode: ${apiKey ? "Live (User API Key)" : process.env.NEXT_PUBLIC_DEMO_MODE === "true" ? "Demo" : "Live (Server API Key)"}`);
 
     // Execute parallel fan-out to OpenRouter
-    const results = await callOfficersParallel(officers, message, conversationHistory);
+    const results = await callOfficersParallel(officers, message, conversationHistory, apiKey);
 
     // Format responses
     const responses: OfficerResponse[] = results.map((result) => {

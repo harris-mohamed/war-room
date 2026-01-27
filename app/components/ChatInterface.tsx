@@ -5,6 +5,7 @@ import MissionModeSelector from "./MissionModeSelector";
 import MessageList from "./MessageList";
 import ChatInput from "./ChatInput";
 import Sidebar, { Chat } from "./Sidebar";
+import ApiKeyBanner from "./ApiKeyBanner";
 
 export type MissionMode = "general" | "research" | "audit" | "problem-solving";
 
@@ -30,6 +31,7 @@ export default function ChatInterface() {
   const [chatSessions, setChatSessions] = useState<ChatSession[]>([]);
   const [currentChatId, setCurrentChatId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [userApiKey, setUserApiKey] = useState<string | null>(null);
 
   // Load from localStorage on mount
   useEffect(() => {
@@ -155,6 +157,7 @@ export default function ChatInterface() {
         body: JSON.stringify({
           message: content,
           missionMode: currentChat.missionMode,
+          apiKey: userApiKey || undefined, // Pass user API key if available
         }),
       });
 
@@ -269,6 +272,9 @@ export default function ChatInterface() {
             </div>
           </div>
         </header>
+
+        {/* API Key Banner */}
+        <ApiKeyBanner onApiKeyChange={setUserApiKey} />
 
         {/* Mission Mode Selector */}
         {currentChat && (
