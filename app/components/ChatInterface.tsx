@@ -117,7 +117,7 @@ export default function ChatInterface() {
   };
 
   const handleSendMessage = async (content: string) => {
-    if (!currentChatId) return;
+    if (!currentChatId || !currentChat) return;
 
     // Add user message
     const userMessage: Message = {
