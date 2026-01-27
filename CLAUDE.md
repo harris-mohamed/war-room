@@ -48,14 +48,15 @@ The "War Room" members are configured according to the **Roster-First Principle*
 * **Controller:** `/lib/roster-manager.ts` (Parses JSON and handles mission-specific filtering).
 * **Dispatcher:** `/api/chat/route.ts` (Executes parallel execution to OpenRouter).
 
-## Mission Profiles (Modes)
+## Capability Classes
 
-Officers are deployed based on the **Mission Mode** requested by the Commander:
+Officers are deployed based on the **Capability Class** requested by the Commander:
 
-1. **General/Everyday:** Full council response for a balanced perspective.
-2. **Research Mode:** O-2 leads; focus on deep synthesis and Markdown file generation.
-3. **Audit Mode:** O-3 takes point to identify security and logical vulnerabilities.
-4. **Problem Solving:** O-1 and O-4 collaborate on rapid technical solutions.
+1. **Strategic:** Top-tier models for critical decisions.
+2. **Operational:** Production-grade balanced response.
+3. **Tactical:** Fast specialist models.
+4. **Support:** Efficient cost-effective models.
+5. **All:** Full council deployment.
 
 ## Tech Stack & Security
 

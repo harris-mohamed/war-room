@@ -15,24 +15,28 @@ The "War Room" members are configured according to the **Roster-First Principle*
     "O1": {
       "title": "Chief of Operations",
       "model": "openai/gpt-4o",
+      "capability_class": "Operational",
       "specialty": "Execution",
       "system_prompt": "You are the Architect. Focus on technical COAs (Courses of Action) and direct execution steps."
     },
     "O2": {
       "title": "Intelligence Officer",
       "model": "anthropic/claude-3.5-sonnet",
+      "capability_class": "Operational",
       "specialty": "Research",
-      "system_prompt": "You are the Researcher. Synthesize data, identify patterns, and cite sources. Lead in Research Mode."
+      "system_prompt": "You are the Researcher. Synthesize data, identify patterns, and cite sources."
     },
     "O3": {
       "title": "Red Team Lead",
       "model": "anthropic/claude-3-7-sonnet",
+      "capability_class": "Operational",
       "specialty": "Adversarial Review",
       "system_prompt": "You are the Critic. Find flaws in the other officers' logic and highlight security risks."
     },
     "O4": {
       "title": "Logistics Officer",
       "model": "google/gemini-2.0-flash-001",
+      "capability_class": "Tactical",
       "specialty": "Infrastructure",
       "system_prompt": "You are the Communications lead. Focus on UI, Vercel deployment, and formatting."
     }
@@ -48,14 +52,15 @@ The "War Room" members are configured according to the **Roster-First Principle*
 * **Controller:** `/lib/roster-manager.ts` (Parses JSON and handles mission-specific filtering).
 * **Dispatcher:** `/api/chat/route.ts` (Executes parallel execution to OpenRouter).
 
-## Mission Profiles (Modes)
+## Capability Classes
 
-Officers are deployed based on the **Mission Mode** requested by the Commander:
+Officers are deployed based on the **Capability Class** requested by the Commander:
 
-1. **General/Everyday:** Full council response for a balanced perspective.
-2. **Research Mode:** O-2 leads; focus on deep synthesis and Markdown file generation.
-3. **Audit Mode:** O-3 takes point to identify security and logical vulnerabilities.
-4. **Problem Solving:** O-1 and O-4 collaborate on rapid technical solutions.
+1. **Strategic:** Top-tier models for critical decisions.
+2. **Operational:** Production-grade balanced response.
+3. **Tactical:** Fast specialist models.
+4. **Support:** Efficient cost-effective models.
+5. **All:** Full council deployment.
 
 ## Tech Stack & Security
 

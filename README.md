@@ -7,7 +7,7 @@ A specialized, multi-LLM strategic interface utilizing a **Dynamic Fan-Out Archi
 ## Features
 
 - **Multi-LLM Analysis**: Query multiple AI models simultaneously (Claude, GPT, Gemini, etc.)
-- **Mission Modes**: Different deployment strategies (General, Research, Audit, Problem Solving)
+- **Capability Classes**: Different deployment strategies (Strategic, Operational, Tactical, Support, All)
 - **Demo Mode**: Try the interface with hardcoded responses before adding an API key
 - **Session Persistence**: Chat history saved in browser localStorage
 - **Responsive Grid Layout**: Officer responses displayed side-by-side
@@ -96,12 +96,13 @@ Officers are configured in `/config/roster.json`. Each officer has:
 - **System Prompt**: Instructions for the model
 - **Capability Class**: Strategic, Operational, Tactical, or Support
 
-### Mission Modes
+### Capability Classes
 
-- **General**: Full council response (all active officers)
-- **Research**: Intelligence Officer leads deep analysis
-- **Audit**: Red Team Lead identifies risks and flaws
-- **Problem Solving**: Focused technical execution
+- **Strategic**: Top-tier models for critical decisions
+- **Operational**: Production-grade balanced response
+- **Tactical**: Fast specialist models
+- **Support**: Efficient cost-effective models
+- **All**: Full council deployment
 
 ## Tech Stack
 

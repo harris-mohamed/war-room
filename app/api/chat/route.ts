@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getOfficersForMission, getOfficerById, type MissionMode } from "@/lib/roster-manager";
+import { getOfficersForMission, getOfficerById, type CapabilityClass } from "@/lib/roster-manager";
 import { callOfficersParallel, type Message } from "@/lib/openrouter";
 
 export interface ChatRequest {
   message: string;
-  missionMode: MissionMode;
+  capabilityClass: CapabilityClass;
   conversationHistory?: Message[];
   apiKey?: string; // Optional user-provided API key (session-only)
 }
@@ -24,7 +24,7 @@ export interface ChatResponse {
 export async function POST(request: NextRequest) {
   try {
     const body: ChatRequest = await request.json();
-    const { message, missionMode, conversationHistory = [], apiKey } = body;
+    const { message, capabilityClass, conversationHistory = [], apiKey } = body;
 
     // Validate input
     if (!message || typeof message !== "string") {
@@ -34,24 +34,24 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!missionMode) {
+    if (!capabilityClass) {
       return NextResponse.json(
-        { error: "Mission mode is required" },
+        { error: "Capability class is required" },
         { status: 400 }
       );
     }
 
-    // Get officers for this mission
-    const officers = getOfficersForMission(missionMode);
+    // Get officers for this capability class
+    const officers = getOfficersForMission(capabilityClass);
 
     if (officers.length === 0) {
       return NextResponse.json(
-        { error: "No officers available for this mission mode" },
+        { error: "No officers available for this capability class" },
         { status: 500 }
       );
     }
 
-    console.log(`[War Room] Mission ${missionMode}: Deploying ${officers.length} officers`);
+    console.log(`[War Room] Capability Class ${capabilityClass}: Deploying ${officers.length} officers`);
     console.log(`[War Room] Officers: ${officers.map(o => o.id).join(", ")}`);
     console.log(`[War Room] Mode: ${apiKey ? "Live (User API Key)" : process.env.NEXT_PUBLIC_DEMO_MODE === "true" ? "Demo" : "Live (Server API Key)"}`);
 

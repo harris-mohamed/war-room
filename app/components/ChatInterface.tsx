@@ -7,7 +7,7 @@ import ChatInput from "./ChatInput";
 import Sidebar, { Chat } from "./Sidebar";
 import ApiKeyBanner from "./ApiKeyBanner";
 
-export type MissionMode = "general" | "research" | "audit" | "problem-solving";
+export type CapabilityClass = "Strategic" | "Operational" | "Tactical" | "Support" | "All";
 
 export interface Message {
   id: string;
@@ -22,7 +22,7 @@ interface ChatSession {
   id: string;
   title: string;
   messages: Message[];
-  missionMode: MissionMode;
+  capabilityClass: CapabilityClass;
   createdAt: Date;
   lastMessageAt: Date;
 }
@@ -79,7 +79,7 @@ export default function ChatInterface() {
       id: Date.now().toString(),
       title: "New Mission",
       messages: [],
-      missionMode: "general",
+      capabilityClass: "Operational",
       createdAt: new Date(),
       lastMessageAt: new Date(),
     };
@@ -107,11 +107,11 @@ export default function ChatInterface() {
     );
   };
 
-  const handleMissionModeChange = (mode: MissionMode) => {
+  const handleCapabilityClassChange = (capClass: CapabilityClass) => {
     if (!currentChatId) return;
     setChatSessions((prev) =>
       prev.map((chat) =>
-        chat.id === currentChatId ? { ...chat, missionMode: mode } : chat
+        chat.id === currentChatId ? { ...chat, capabilityClass: capClass } : chat
       )
     );
   };
@@ -156,7 +156,7 @@ export default function ChatInterface() {
         },
         body: JSON.stringify({
           message: content,
-          missionMode: currentChat.missionMode,
+          capabilityClass: currentChat.capabilityClass,
           apiKey: userApiKey || undefined, // Pass user API key if available
         }),
       });
@@ -281,8 +281,8 @@ export default function ChatInterface() {
           <div className="border-b border-slate-800 bg-slate-900/30">
             <div className="px-6 py-3">
               <MissionModeSelector
-                currentMode={currentChat.missionMode}
-                onModeChange={handleMissionModeChange}
+                currentMode={currentChat.capabilityClass}
+                onModeChange={handleCapabilityClassChange}
               />
             </div>
           </div>

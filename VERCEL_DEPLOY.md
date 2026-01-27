@@ -50,7 +50,7 @@ After deployment:
 2. You should see "Demo Mode" banner at the top
 3. Send any message - you'll get the Evernote analysis demo responses
 4. Click "Add API Key" to test the live mode flow
-5. Try different Mission Modes (General, Research, Audit, Problem Solving)
+5. Try different Capability Classes (Strategic, Operational, Tactical, Support, All)
 
 ## Cost Considerations
 
