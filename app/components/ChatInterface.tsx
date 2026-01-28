@@ -27,15 +27,74 @@ interface ChatSession {
   lastMessageAt: Date;
 }
 
+// Function to create demo session with pre-populated messages
+const createDemoSession = (): ChatSession => {
+  const now = new Date();
+  const demoQuestion = "Analyze Evernote's downfall and what led to their decline";
+
+  const demoMessages: Message[] = [
+    {
+      id: "demo-user-1",
+      type: "user",
+      content: demoQuestion,
+      timestamp: now,
+    },
+    {
+      id: "demo-o1",
+      type: "officer",
+      content: "*[Demo Response]*\n\n**Executive Analysis: Evernote's Strategic Missteps**\n\nThe collapse of Evernote represents a classic case of strategic drift and execution failure. Here are the critical factors:\n\n**1. Product Bloat & Loss of Focus**\n- Started as a simple note-taking app, became a cluttered everything-app\n- Added features (Work Chat, Context, Spaces) that users didn't request\n- Core note-taking experience degraded while complexity increased\n\n**2. Pricing & Monetization Failures**\n- Multiple pricing tier changes confused and alienated users\n- Free tier became increasingly restrictive (2-device limit in 2016)\n- Premium features weren't compelling enough to justify cost\n- Failed to find sustainable business model between freemium and enterprise\n\n**3. Leadership Instability**\n- 5 CEOs between 2015-2023 created strategic whiplash\n- Each leadership change brought new direction, fragmenting product vision\n\n**Recommendation:** Evernote's downfall is a cautionary tale about maintaining product discipline, sustainable pricing, and technical excellence.",
+      officerId: "O1",
+      officerTitle: "Chief of Operations",
+      timestamp: now,
+    },
+    {
+      id: "demo-o2",
+      type: "officer",
+      content: "*[Demo Response]*\n\n**Intelligence Report: Evernote Decline - Data Synthesis**\n\nAfter analyzing market data, user sentiment, and competitive dynamics:\n\n**Timeline of Decline:**\n- **2008-2012:** Golden era - product-market fit, rapid growth, reached 100M users by 2014\n- **2015-2016:** Peak valuation ($1B unicorn status), but cracks appearing\n- **2016-2018:** User exodus begins as pricing changes and product bloat intensify\n- **2020-2023:** Acquisition by Bending Spoons (2022), massive layoffs, damage control\n\n**Competitor Analysis:**\n| Competitor | Launch | Key Advantage |\n|------------|--------|---------------|\n| Notion | 2016 | Databases, collaboration, modern UX |\n| Roam Research | 2019 | Bi-directional linking |\n| Obsidian | 2020 | Local-first, markdown |\n| Apple Notes | Pre-existing | Free, native, \"good enough\" |\n\n**Critical Insight:** Evernote failed to recognize that note-taking is a deeply personal workflow. Users invested years building their system, but mounting frustrations eventually overcame switching costs.",
+      officerId: "O2",
+      officerTitle: "Intelligence Officer",
+      timestamp: now,
+    },
+    {
+      id: "demo-o3",
+      type: "officer",
+      content: "*[Demo Response]*\n\n**Red Team Assessment: What They Got Wrong**\n\nLet me tear apart the strategic failures and identify the vulnerabilities that weren't addressed:\n\n**CRITICAL FLAW #1: Ignored Network Effects Opportunity**\nEvernote positioned itself as a personal tool when collaboration was clearly the future. Notion understood this. Evernote didn't.\n\n**CRITICAL FLAW #2: Technical Architecture Rot**\nThe sync engine was fundamentally broken for YEARS. Users reported:\n- Lost notes (unacceptable for a note-taking app)\n- Conflict resolution disasters\n- Slow sync times (minutes vs. seconds for competitors)\n\nThey never rebuilt the foundation. They just painted over the cracks.\n\n**CRITICAL FLAW #3: Proprietary Format Lock-In Backfired**\nEvernote used a proprietary .enex format thinking it would create lock-in. Instead:\n- Users felt trapped and resentful\n- Competitors embraced Markdown and won goodwill\n\n**The Real Killer:** Evernote stopped being a product people loved and became a product people tolerated... until they didn't.",
+      officerId: "O3",
+      officerTitle: "Red Team Lead",
+      timestamp: now,
+    },
+    {
+      id: "demo-o4",
+      type: "officer",
+      content: "*[Demo Response]*\n\n**Logistics & Infrastructure Analysis: The Operational Breakdown**\n\nFrom an infrastructure and user experience perspective:\n\n**UI/UX Deterioration:**\n- Multiple redesigns (2013, 2015, 2019) that removed features users relied on\n- Desktop apps became bloated Electron wrappers (slower, higher memory usage)\n- Web clipper (a killer feature) became buggy and unreliable\n- Mobile apps fell behind iOS/Android design standards\n\n**Infrastructure Costs vs. Revenue:**\n- Hosting millions of free users with unlimited note storage was unsustainable\n- AWS bills grew while revenue per user stagnated\n- Had to impose device limits and upload caps to control costs\n- This created user hostility—felt like bait-and-switch\n\n**Modern SaaS Best Practices They Missed:**\n- No freemium-to-paid conversion funnel optimization\n- Weak onboarding (competitors had interactive tutorials)\n- No viral loops or referral programs\n- Poor customer success operations\n\n**Conclusion:** Operational excellence matters. Evernote lost because they couldn't ship fast enough, fix critical bugs quickly enough, or provide an experience that justified their premium pricing.",
+      officerId: "O4",
+      officerTitle: "Logistics Officer",
+      timestamp: now,
+    },
+  ];
+
+  return {
+    id: "demo-session",
+    title: "Demo: Evernote Analysis",
+    messages: demoMessages,
+    capabilityClass: "Operational",
+    createdAt: now,
+    lastMessageAt: now,
+  };
+};
+
 export default function ChatInterface() {
   const [chatSessions, setChatSessions] = useState<ChatSession[]>([]);
   const [currentChatId, setCurrentChatId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [userApiKey, setUserApiKey] = useState<string | null>(null);
 
-  // Load from localStorage on mount
+  // Load from localStorage on mount, or create demo session
   useEffect(() => {
     const saved = localStorage.getItem("warroom-chats");
+    const hasApiKey = sessionStorage.getItem("warroom-api-key");
+    const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
+
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
@@ -55,6 +114,11 @@ export default function ChatInterface() {
       } catch (error) {
         console.error("Failed to load chats:", error);
       }
+    } else if (!hasApiKey && isDemoMode) {
+      // Create demo session on first load when in demo mode
+      const demoSession = createDemoSession();
+      setChatSessions([demoSession]);
+      setCurrentChatId(demoSession.id);
     }
   }, []);
 
@@ -223,12 +287,16 @@ export default function ChatInterface() {
     }
   };
 
-  // Create first chat if none exist
+  // Create first chat if none exist (not in demo mode)
   useEffect(() => {
-    if (chatSessions.length === 0 && currentChatId === null) {
+    const hasApiKey = sessionStorage.getItem("warroom-api-key");
+    const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
+
+    // Only auto-create if not in demo mode or user has added API key
+    if (chatSessions.length === 0 && currentChatId === null && (!isDemoMode || hasApiKey)) {
       handleNewChat();
     }
-  }, []);
+  }, [chatSessions.length, currentChatId]);
 
   const chats: Chat[] = chatSessions.map((session) => ({
     id: session.id,
@@ -284,6 +352,23 @@ export default function ChatInterface() {
                 currentMode={currentChat.capabilityClass}
                 onModeChange={handleCapabilityClassChange}
               />
+            </div>
+          </div>
+        )}
+
+        {/* Demo Banner */}
+        {currentChat?.id === "demo-session" && (
+          <div className="bg-blue-900/30 border-b border-blue-700/50 px-6 py-3">
+            <div className="flex items-center gap-3">
+              <span className="text-2xl">📋</span>
+              <div>
+                <p className="text-sm font-semibold text-blue-100">
+                  Demo Session - Sample Responses
+                </p>
+                <p className="text-xs text-blue-200/80">
+                  This shows example multi-LLM analysis. Add your OpenRouter API key above to query real AI models with your own questions.
+                </p>
+              </div>
             </div>
           </div>
         )}
