@@ -247,6 +247,7 @@ export default function ChatInterface() {
         body: JSON.stringify({
           message: content,
           capabilityClass: currentChat.capabilityClass,
+          conversationHistory: currentChat.messages,
         }),
       });
 

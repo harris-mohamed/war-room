@@ -96,15 +96,15 @@ export async function callOfficer(
 
 /**
  * Call multiple officers in parallel (Dynamic Fan-Out Architecture)
+ * Each officer receives their own filtered conversation history
  */
 export async function callOfficersParallel(
-  officers: Officer[],
-  userMessage: string,
-  conversationHistory: Message[] = []
+  officersWithHistory: Array<{ officer: Officer; history: Message[] }>,
+  userMessage: string
 ): Promise<Array<{ officerId: string; content: string; error?: string }>> {
-  // Execute all officer calls in parallel
-  const promises = officers.map((officer) =>
-    callOfficer(officer, userMessage, conversationHistory)
+  // Execute all officer calls in parallel with their individual histories
+  const promises = officersWithHistory.map(({ officer, history }) =>
+    callOfficer(officer, userMessage, history)
   );
 
   // Wait for all to complete
