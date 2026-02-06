@@ -60,7 +60,7 @@ export default function Sidebar({
 
   if (isCollapsed) {
     return (
-      <div className="w-16 bg-slate-900 border-r border-slate-800 flex flex-col items-center py-4 gap-4">
+      <div className="w-16 h-screen bg-slate-900 border-r border-slate-800 flex flex-col items-center py-4 gap-4">
         <button
           onClick={() => setIsCollapsed(false)}
           className="p-3 hover:bg-slate-800 rounded-lg transition-colors text-slate-400 hover:text-slate-200"
@@ -104,7 +104,7 @@ export default function Sidebar({
   }
 
   return (
-    <div className="w-80 bg-slate-900 border-r border-slate-800 flex flex-col">
+    <div className="w-80 h-screen bg-slate-900 border-r border-slate-800 flex flex-col">
       {/* Header */}
       <div className="p-4 border-b border-slate-800">
         <div className="flex items-center justify-between mb-4">
@@ -210,7 +210,7 @@ export default function Sidebar({
 
                   {/* Action buttons */}
                   {editingChatId !== chat.id && (
-                    <div className="absolute right-2 top-3 hidden group-hover:flex items-center gap-1">
+                    <div className="absolute right-2 top-3 flex md:hidden md:group-hover:flex items-center gap-1">
                       <button
                         onClick={(e) => {
                           e.stopPropagation();

@@ -32,6 +32,7 @@ export default function ChatInterface() {
   const [chatSessions, setChatSessions] = useState<ChatSession[]>([]);
   const [currentChatId, setCurrentChatId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // Load sessions from database on mount
   useEffect(() => {
@@ -335,35 +336,79 @@ export default function ChatInterface() {
   }));
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen relative">
+      {/* Mobile Sidebar Overlay */}
+      {isSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 md:hidden"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
-      <Sidebar
-        chats={chats}
-        currentChatId={currentChatId}
-        onSelectChat={handleSelectChat}
-        onNewChat={handleNewChat}
-        onDeleteChat={handleDeleteChat}
-        onRenameChat={handleRenameChat}
-      />
+      <div
+        className={`
+          fixed md:relative inset-y-0 left-0 z-50 md:z-0
+          transform transition-transform duration-300 ease-in-out
+          ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
+        `}
+      >
+        <Sidebar
+          chats={chats}
+          currentChatId={currentChatId}
+          onSelectChat={(chatId) => {
+            handleSelectChat(chatId);
+            setIsSidebarOpen(false); // Close sidebar on mobile after selecting
+          }}
+          onNewChat={() => {
+            handleNewChat();
+            setIsSidebarOpen(false);
+          }}
+          onDeleteChat={handleDeleteChat}
+          onRenameChat={handleRenameChat}
+        />
+      </div>
 
       {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col w-full md:w-auto">
         {/* Header */}
         <header className="border-b border-slate-800 bg-slate-900/50 backdrop-blur">
-          <div className="px-6 py-4">
+          <div className="px-3 sm:px-6 py-3 sm:py-4">
             <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-2xl font-bold text-slate-100 tracking-tight">
-                  THE WAR ROOM
-                </h1>
-                <p className="text-sm text-slate-400 mt-1">
-                  Multi-LLM Strategic Command Interface
-                </p>
+              <div className="flex items-center gap-3">
+                {/* Mobile hamburger menu */}
+                <button
+                  onClick={() => setIsSidebarOpen(true)}
+                  className="md:hidden p-2 hover:bg-slate-800 rounded-lg transition-colors text-slate-400 hover:text-slate-200"
+                  aria-label="Open menu"
+                >
+                  <svg
+                    className="w-6 h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M4 6h16M4 12h16M4 18h16"
+                    />
+                  </svg>
+                </button>
+                <div>
+                  <h1 className="text-xl sm:text-2xl font-bold text-slate-100 tracking-tight">
+                    THE WAR ROOM
+                  </h1>
+                  <p className="text-xs sm:text-sm text-slate-400 mt-1 hidden sm:block">
+                    Multi-LLM Strategic Command Interface
+                  </p>
+                </div>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5 sm:gap-2">
                 <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span className="text-xs text-slate-400 uppercase tracking-wider">
-                  System Online
+                <span className="text-[10px] sm:text-xs text-slate-400 uppercase tracking-wider">
+                  <span className="hidden sm:inline">System </span>Online
                 </span>
               </div>
             </div>
@@ -373,7 +418,7 @@ export default function ChatInterface() {
         {/* Capability Class Selector */}
         {currentChat && (
           <div className="border-b border-slate-800 bg-slate-900/30">
-            <div className="px-6 py-3">
+            <div className="px-3 sm:px-6 py-2 sm:py-3">
               <MissionModeSelector
                 currentMode={currentChat.capabilityClass}
                 onModeChange={handleCapabilityClassChange}
@@ -393,7 +438,7 @@ export default function ChatInterface() {
         {/* Input */}
         {currentChat && (
           <div className="border-t border-slate-800 bg-slate-900/50 backdrop-blur">
-            <div className="px-6 py-4">
+            <div className="px-3 sm:px-6 py-3 sm:py-4">
               <ChatInput onSend={handleSendMessage} disabled={isLoading} />
             </div>
           </div>
