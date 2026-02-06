@@ -62,7 +62,7 @@ export default function MessageList({ messages, isLoading }: MessageListProps) {
 
   return (
     <div className="h-full overflow-y-auto">
-      <div className="w-full px-6 py-6 space-y-6">
+      <div className="w-full px-3 sm:px-6 py-4 sm:py-6 space-y-4 sm:space-y-6">
         {messages.length === 0 && (
           <div className="flex flex-col items-center justify-center h-full text-center py-20">
             <div className="text-6xl mb-4">🎖️</div>
@@ -86,8 +86,8 @@ export default function MessageList({ messages, isLoading }: MessageListProps) {
                 className="animate-in fade-in slide-in-from-bottom-2 duration-300"
               >
                 <div className="flex justify-end">
-                  <div className="max-w-3xl">
-                    <div className="bg-slate-800 rounded-lg px-4 py-3 border border-slate-700">
+                  <div className="w-full sm:max-w-3xl">
+                    <div className="bg-slate-800 rounded-lg px-3 sm:px-4 py-2 sm:py-3 border border-slate-700">
                       <div className="flex items-center gap-2 mb-2">
                         <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
                           Commander
@@ -106,16 +106,16 @@ export default function MessageList({ messages, isLoading }: MessageListProps) {
             );
           }
 
-          // Group of officer messages - display horizontally
+          // Group of officer messages - display horizontally on desktop, vertically on mobile
           const officerMessages = item;
           return (
             <div
               key={`group-${index}`}
               className="animate-in fade-in slide-in-from-bottom-2 duration-300"
             >
-              <div className="flex gap-3 overflow-x-auto">
+              <div className="flex flex-col md:flex-row gap-3 md:overflow-x-auto">
                 {officerMessages.map((message) => (
-                  <div key={message.id} className="flex-1 min-w-[280px]">
+                  <div key={message.id} className="flex-1 md:min-w-[280px]">
                     <div
                       className={`
                         h-full rounded-lg px-3 py-2 border flex flex-col

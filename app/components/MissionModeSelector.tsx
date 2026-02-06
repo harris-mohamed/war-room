@@ -45,17 +45,17 @@ export default function MissionModeSelector({
   onModeChange,
 }: MissionModeSelectorProps) {
   return (
-    <div className="flex items-center gap-2">
-      <span className="text-xs text-slate-500 uppercase tracking-wider font-semibold mr-2">
+    <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+      <span className="text-[10px] sm:text-xs text-slate-500 uppercase tracking-wider font-semibold">
         Capability Class:
       </span>
-      <div className="flex gap-2 flex-wrap">
+      <div className="flex gap-1.5 sm:gap-2 flex-wrap">
         {modes.map((mode) => (
           <button
             key={mode.id}
             onClick={() => onModeChange(mode.id)}
             className={`
-              group relative px-4 py-2 rounded-lg text-sm font-medium transition-all
+              group relative px-2.5 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all min-h-[44px]
               ${
                 currentMode === mode.id
                   ? "bg-emerald-600 text-white shadow-lg shadow-emerald-500/20"
@@ -63,8 +63,8 @@ export default function MissionModeSelector({
               }
             `}
           >
-            <span className="flex items-center gap-2">
-              <span>{mode.icon}</span>
+            <span className="flex items-center gap-1.5 sm:gap-2">
+              <span className="text-sm sm:text-base">{mode.icon}</span>
               <span>{mode.label}</span>
             </span>
 
