@@ -1,3 +1,5 @@
+This was a fun experiment, but has now been replaced by [Atlas](https://github.com/harris-mohamed/atlas).
+
 # The War Room
 
 A multi-LLM strategic interface that queries multiple AI models in parallel to get diversified opinions and perspectives on any question.
